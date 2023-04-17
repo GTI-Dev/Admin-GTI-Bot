@@ -1,17 +1,24 @@
+import json
 import telebot
+from telebot import types
+import requests
+import time
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-bot_token = "1327017230:AAGwGWpKCmKhFymYuGEC-21Dni4vfHIqong"
+bot_token = "6261425349:AAHDit0-4gIUSHOBabfkARIuVWtjIIkXV_8"
+
 
 bot = telebot.TeleBot(bot_token)
+users = set()
+users = {}
 
-# Handler for the start command
+
 @bot.message_handler(commands=['start'])
-def welcome_message(message):
-    # Construct the welcome message
-    welcome_text = "Hi there! Welcome to my bot. I'm here to help you with whatever you need. To get started, just send me a message."
-    
-    # Send the welcome message
-    bot.reply_to(message, welcome_text)
+def start_command(message):
+    chat_id = message.chat.id
+    bot.send_chat_action(chat_id, 'typing')
+    bot.send_message(message.chat.id, "If you need further assistance, contact us through the support links provided in the start message. \n\n ተጨማሪ እርዳታ ከፈለጉ በመነሻ መልእክት ውስጥ በተሰጡት የድጋፍ ማገናኛዎች በኩል ያግኙን.",)
+
 
 # Start the bot
 bot.polling()
