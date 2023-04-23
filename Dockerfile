@@ -1,20 +1,15 @@
-# Use an official Python runtime as a parent image
-FROM python:3.8-slim-buster
-
-# Set the working directory to /app
+FROM debian:11
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update
+RUN apt-get install python3 python3-pip git curl ffmpeg mediainfo -y
+ARG USER=root
+USER $USER
 WORKDIR /app
-
-# Copy the current directory contents into the container at /app
-COPY . /app
-
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Make port 80 available to the world outside this container
-EXPOSE 80
-
-# Define environment variable
-ENV NAME World
-
-# Run bot.py when the container launches
-CMD ["python", "app.py"]
+COPY requirements.txt ./requirements.txt
+RUN pip3 install -r requirements.txt
+COPY start.sh start.sh
+COPY app.py app.py
+COPY .env .env
+EXPOSE 5000
+RUN chmod +x /app/start.sh
+ENTRYPOINT ["./start.sh"]
